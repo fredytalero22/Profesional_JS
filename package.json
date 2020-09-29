@@ -2,7 +2,7 @@
   "name": "platzi_media_player",
   "version": "1.0.0",
   "description": "Proyecto curso profesional de JavaScript",
-  "main": "index.js",
+  "main": "assets/index.js",
   "scripts": {
     "start": "live-server"
   },
