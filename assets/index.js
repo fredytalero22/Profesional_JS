@@ -6,7 +6,7 @@ const buttonPlay = document.getElementById("play");
 const buttonMute = document.getElementById("mute");
 
 const player = new MediaPlayer({ el: video, plugins: [
-//     new AutoPlay() 
+     new AutoPlay() 
     ] 
 });
 buttonPlay.onclick = () => video.paused ? player.play() : player.pause();
