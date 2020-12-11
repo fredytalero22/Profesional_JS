@@ -125,48 +125,51 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-function MediaPlayer(config) {
-  this.media = config.el;
-  this.plugins = config.plugins || [];
+class MediaPlayer {
+  constructor(config) {
+    this.media = config.el;
+    this.plugins = config.plugins || [];
 
-  this._initPlugins();
+    this._initPlugins();
+  }
+
+  _initPlugins() {
+    const player = {
+      play: () => this.play(),
+      pause: () => this.pause(),
+      media: this.media,
+
+      get muted() {
+        return this.media.muted;
+      },
+
+      set muted(value) {
+        this.media.muted = value;
+      }
+
+    };
+    this.plugins.forEach(plugin => {
+      plugin.run(player);
+    });
+  }
+
+  play() {
+    this.media.play();
+  }
+
+  pause() {
+    this.media.pause();
+  }
+
+  mute() {
+    this.media.muted = true;
+  }
+
+  unmute() {
+    this.media.muted = false;
+  }
+
 }
-
-MediaPlayer.prototype._initPlugins = function () {
-  const player = {
-    play: () => this.play(),
-    pause: () => this.pause(),
-    media: this.media,
-
-    get muted() {
-      return this.media.muted;
-    },
-
-    set muted(value) {
-      this.media.muted = value;
-    }
-
-  };
-  this.plugins.forEach(plugin => {
-    plugin.run(player);
-  });
-};
-
-MediaPlayer.prototype.play = function () {
-  this.media.play();
-};
-
-MediaPlayer.prototype.pause = function () {
-  this.media.pause();
-};
-
-MediaPlayer.prototype.mute = function () {
-  this.media.muted = true;
-};
-
-MediaPlayer.prototype.unmute = function () {
-  this.media.muted = false;
-};
 
 var _default = MediaPlayer;
 exports.default = _default;
@@ -190,55 +193,56 @@ AutoPlay.prototype.run = function (player) {
 
 var _default = AutoPlay;
 exports.default = _default;
-},{}],"assets/plugins/AutoPause.js":[function(require,module,exports) {
+},{}],"assets/plugins/AutoPause.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
 
-class AutoPause {
-  constructor() {
+var AutoPause =
+/** @class */
+function () {
+  function AutoPause() {
     this.threshold = 0.25;
     this.handleIntersection = this.handleIntersection.bind(this);
     this.handleVisibilityChange = this.handleVisibilityChange.bind(this);
   }
 
-  run(player) {
+  AutoPause.prototype.run = function (player) {
     this.player = player;
-    const observer = new IntersectionObserver(this.handleIntersection, {
+    var observer = new IntersectionObserver(this.handleIntersection, {
       threshold: this.threshold //umbral
 
     });
     observer.observe(this.player.media);
     document.addEventListener("visibilitychange", this.handleVisibilityChange);
-  }
+  };
 
-  handleIntersection(entries) {
-    const entry = entries[0]; //Elementos del contenedor
+  AutoPause.prototype.handleIntersection = function (entries) {
+    var entry = entries[0]; //Elementos del contenedor
 
     if (entry.intersectionRatio < this.threshold) {
       this.player.pause();
     } else {
       this.player.play();
     }
-  }
+  };
 
-  handleVisibilityChange() {
-    const isVisible = document.visibilityState === "visible";
+  AutoPause.prototype.handleVisibilityChange = function () {
+    var isVisible = document.visibilityState === "visible";
 
     if (isVisible) {
       this.player.play();
     } else {
       this.player.pause();
     }
-  }
+  };
 
-}
+  return AutoPause;
+}();
 
-var _default = AutoPause;
-exports.default = _default;
+exports.default = AutoPause;
 },{}],"assets/index.js":[function(require,module,exports) {
 "use strict";
 
@@ -246,7 +250,7 @@ var _MediaPlayer = _interopRequireDefault(require("./MediaPlayer.js"));
 
 var _AutoPlay = _interopRequireDefault(require("./plugins/AutoPlay.js"));
 
-var _AutoPause = _interopRequireDefault(require("./plugins/AutoPause.js"));
+var _AutoPause = _interopRequireDefault(require("./plugins/AutoPause.ts"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -267,7 +271,7 @@ if ('serviceWorker' in navigator) {
     console.log(error.message);
   });
 }
-},{"./MediaPlayer.js":"assets/MediaPlayer.js","./plugins/AutoPlay.js":"assets/plugins/AutoPlay.js","./plugins/AutoPause.js":"assets/plugins/AutoPause.js","D:\\JFTO\\PERSONAL\\TUTORIALES\\Platzi\\Profesional_JS\\sw.js":[["sw.js","sw.js"],"sw.js.map","sw.js"]}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./MediaPlayer.js":"assets/MediaPlayer.js","./plugins/AutoPlay.js":"assets/plugins/AutoPlay.js","./plugins/AutoPause.ts":"assets/plugins/AutoPause.ts","D:\\JFTO\\PERSONAL\\TUTORIALES\\Platzi\\Profesional_JS\\sw.js":[["sw.js","sw.js"],"sw.js.map","sw.js"]}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
